@@ -230,6 +230,7 @@ const AetherBooth = {
   currentCaptureIndex: 0, // 0, 1, or 2
   selectedFilter: 'normal',
   selectedFrame: 'none',
+  currentFacingMode: 'user', // 'user' (front) or 'environment' (back)
   compiledStripDataUrl: null,
 
   // Live Canvas Preview variables
@@ -273,6 +274,7 @@ const AetherBooth = {
     this.dom.btnStart = document.getElementById('btn-start');
     this.dom.btnCapture = document.getElementById('btn-capture');
     this.dom.btnBackHome = document.getElementById('btn-back-home');
+    this.dom.btnFlipCamera = document.getElementById('btn-flip-camera');
     this.dom.cameraError = document.getElementById('camera-error');
 
     this.dom.filterOptions = document.getElementById('filter-options');
@@ -318,6 +320,9 @@ const AetherBooth = {
     this.dom.btnSuccessNew.addEventListener('click', () => this.restartCaptureFromSuccess());
     this.dom.btnRetake.addEventListener('click', () => this.restartCaptureFromPuzzle());
     this.dom.btnUnlockContinue.addEventListener('click', () => this.continueToNextPhoto());
+    if (this.dom.btnFlipCamera) {
+      this.dom.btnFlipCamera.addEventListener('click', () => this.flipCamera());
+    }
 
     // Capturing
     this.dom.btnCapture.addEventListener('click', () => this.startCaptureSequence());
@@ -397,7 +402,7 @@ const AetherBooth = {
         video: {
           width: { ideal: 640 },
           height: { ideal: 480 },
-          facingMode: 'user'
+          facingMode: this.currentFacingMode
         },
         audio: false
       });
@@ -479,16 +484,37 @@ const AetherBooth = {
     this.previewLoopId = requestAnimationFrame(render);
   },
 
+  async flipCamera() {
+    this.currentFacingMode = (this.currentFacingMode === 'user') ? 'environment' : 'user';
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+    }
+    try {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          facingMode: this.currentFacingMode
+        },
+        audio: false
+      });
+      this.dom.videoPreview.srcObject = this.mediaStream;
+    } catch (err) {
+      console.warn("Could not switch camera mode:", err);
+    }
+  },
+
   renderLiveFrame() {
     const canvas = this.dom.cameraCanvas;
     const ctx = canvas.getContext('2d');
-    
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw mirrored video directly onto cameraCanvas
+
     ctx.save();
-    ctx.translate(this.photoWidth, 0);
-    ctx.scale(-1, 1);
+    if (this.currentFacingMode === 'user') {
+      ctx.translate(this.photoWidth, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(this.dom.videoPreview, 0, 0, this.photoWidth, this.photoHeight);
     ctx.restore();
   },

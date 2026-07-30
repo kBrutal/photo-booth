@@ -599,6 +599,31 @@ body {
   }
 }
 
+/* Mobile Camera Flip Button */
+.btn-flip-cam {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--border-dark);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 8;
+  box-shadow: 2px 2px 0px var(--border-dark);
+  transition: var(--transition-tactile);
+}
+
+.btn-flip-cam:active {
+  transform: scale(0.92) rotate(180deg);
+}
+
 /* Camera Frame Controls */
 .frames-container {
   display: flex;
