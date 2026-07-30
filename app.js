@@ -506,18 +506,51 @@ const AetherBooth = {
     }
   },
 
+  getScaledVideoCoords(video, targetWidth, targetHeight) {
+    const vw = video.videoWidth || 640;
+    const vh = video.videoHeight || 480;
+    const videoAspect = vw / vh;
+    const targetAspect = targetWidth / targetHeight;
+
+    let drawW = targetWidth;
+    let drawH = targetHeight;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (videoAspect > targetAspect) {
+      drawH = targetWidth / videoAspect;
+      offsetY = (targetHeight - drawH) / 2;
+    } else {
+      drawW = targetHeight * videoAspect;
+      offsetX = (targetWidth - drawW) / 2;
+    }
+
+    return { offsetX, offsetY, drawW, drawH };
+  },
+
   renderLiveFrame() {
     const canvas = this.dom.cameraCanvas;
     const ctx = canvas.getContext('2d');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const { offsetX, offsetY, drawW, drawH } = this.getScaledVideoCoords(
+      this.dom.videoPreview,
+      this.photoWidth,
+      this.photoHeight
+    );
 
     ctx.save();
     if (this.currentFacingMode === 'user') {
       ctx.translate(this.photoWidth, 0);
       ctx.scale(-1, 1);
+      const mirroredX = this.photoWidth - (offsetX + drawW);
+      ctx.drawImage(this.dom.videoPreview, mirroredX, offsetY, drawW, drawH);
+    } else {
+      ctx.drawImage(this.dom.videoPreview, offsetX, offsetY, drawW, drawH);
     }
-    ctx.drawImage(this.dom.videoPreview, 0, 0, this.photoWidth, this.photoHeight);
     ctx.restore();
   },
 
