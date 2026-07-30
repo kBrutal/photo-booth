@@ -1473,7 +1473,7 @@ body {
 }
 
 /* ==========================================
-   6. RESPONSIVE DESIGN & MOBILE OPTIMIZATIONS
+   6. AUTOMATIC DEVICE DETECTION & MOBILE SCALING
    ========================================== */
 
 /* Touch momentum horizontal scrollbars for toolbar items */
@@ -1489,150 +1489,163 @@ body {
   scroll-snap-align: start;
 }
 
-@media (max-width: 992px) {
+/* Automatic Mobile Device Scaling Rules */
+body.is-mobile-device {
+  font-size: 14px;
+}
+
+@media (max-width: 768px), screen and (max-device-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    width: 100vw;
+    font-size: 14px;
+  }
+
   .app-container {
-    padding: 16px 12px;
+    padding: 12px 10px;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  .app-header {
+    margin-bottom: 14px;
+  }
+
+  .app-header h1 {
+    font-size: 1.95rem;
+  }
+
+  .app-header .logo-icon {
+    font-size: 1.5rem;
+  }
+
+  .app-header .tagline {
+    font-size: 0.68rem;
+    letter-spacing: 1.2px;
   }
 
   .booth-layout,
   .puzzle-layout {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .welcome-card {
+    padding: 20px 14px;
+    margin: 8px auto;
+    width: 100%;
+    box-shadow: 4px 4px 0px var(--border-dark);
+  }
+
+  .section-title {
+    font-size: 1.55rem;
+  }
+
+  .section-desc {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+
+  .steps-preview {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .step-item {
+    padding: 12px 10px;
   }
 
   .viewport-container,
   .controls-sidebar,
   .puzzle-board-container,
   .puzzle-info {
-    padding: 16px;
+    padding: 12px;
   }
 
-  .film-strip-preview {
-    margin: 14px 0;
+  .camera-lens {
+    border-radius: 8px;
+    aspect-ratio: 4 / 3;
+    max-height: 48vh;
+  }
+
+  /* Responsive camera frame overlays on mobile */
+  .frame-overlay.frame-dslr {
+    border-width: 12px;
+  }
+
+  .frame-overlay.frame-dslr::before {
+    width: 38px;
+    height: 38px;
+  }
+
+  .frame-overlay.frame-dslr::after {
+    font-size: 0.55rem;
+    padding: 1px 6px;
+    max-width: 95%;
+    bottom: 2px;
+  }
+
+  .frame-overlay.frame-film {
+    border-width: 14px;
+  }
+
+  .frame-overlay.frame-film::before {
+    font-size: 0.52rem;
+    top: -12px;
+    left: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .frame-overlay.frame-film::after {
+    font-size: 0.52rem;
+    bottom: -12px;
+    right: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .frame-overlay.frame-instax {
+    border-top-width: 10px;
+    border-left-width: 12px;
+    border-right-width: 12px;
+    border-bottom-width: 30px;
+  }
+
+  .frame-overlay.frame-instax::before {
+    font-size: 0.52rem;
+    top: -8px;
+  }
+
+  .frame-overlay.frame-instax::after {
+    font-size: 0.68rem;
+    bottom: -24px;
   }
 
   .strip-slots {
     flex-direction: row;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
   }
 
   .strip-slot {
     flex: 1;
-    height: 86px;
+    height: 76px;
+    padding: 4px 4px 10px 4px;
   }
 
-  .puzzle-helper-card {
-    margin-bottom: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .app-header {
-    margin-bottom: 16px;
-  }
-
-  .app-header h1 {
-    font-size: 2.1rem;
-  }
-
-  .app-header .logo-icon {
-    font-size: 1.7rem;
-  }
-
-  .app-header .tagline {
-    font-size: 0.72rem;
-    letter-spacing: 1.5px;
-  }
-
-  .welcome-card {
-    padding: 24px 16px;
-    margin: 12px auto;
-  }
-
-  .section-title {
-    font-size: 1.75rem;
-  }
-
-  .section-desc {
-    font-size: 0.92rem;
-    margin-bottom: 24px;
-  }
-
-  .steps-preview {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  .step-item {
-    padding: 16px 12px;
-  }
-
-  .viewport-container {
-    padding: 12px;
-    gap: 14px;
-  }
-
-  /* Responsive camera frame overlays on mobile */
-  .frame-overlay.frame-dslr {
-    border-width: 14px;
-  }
-
-  .frame-overlay.frame-dslr::after {
-    font-size: 0.58rem;
-    padding: 2px 8px;
-    max-width: 92%;
-    bottom: 2px;
-  }
-
-  .frame-overlay.frame-film {
-    border-width: 16px;
-  }
-
-  .frame-overlay.frame-film::before {
-    font-size: 0.55rem;
-    top: -14px;
-    left: 8px;
-    letter-spacing: 1px;
-  }
-
-  .frame-overlay.frame-film::after {
-    font-size: 0.55rem;
-    bottom: -14px;
-    right: 8px;
-    letter-spacing: 1px;
-  }
-
-  .frame-overlay.frame-instax {
-    border-top-width: 12px;
-    border-left-width: 14px;
-    border-right-width: 14px;
-    border-bottom-width: 34px;
-  }
-
-  .frame-overlay.frame-instax::before {
-    font-size: 0.55rem;
-    top: -10px;
-  }
-
-  .frame-overlay.frame-instax::after {
-    font-size: 0.72rem;
-    bottom: -26px;
-  }
-
-  /* Puzzle responsive mobile scaling */
+  /* Auto-scaling puzzle board on mobile */
   .puzzle-wrapper {
     padding: 6px;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .puzzle-grid {
     width: 100%;
     max-width: 100%;
     aspect-ratio: 4 / 3;
-    gap: 4px;
+    gap: 3px;
   }
 
   .puzzle-actions {
@@ -1643,22 +1656,26 @@ body {
 
   .puzzle-actions .btn {
     flex: 1;
-    padding: 10px 8px;
-    font-size: 0.78rem;
+    padding: 10px 6px;
+    font-size: 0.75rem;
+  }
+
+  .puzzle-helper-card {
+    margin-bottom: 12px;
   }
 
   /* Overlays & Modals on mobile */
   .success-card,
   .modal-card {
     width: 95%;
-    max-width: 400px;
-    padding: 20px 16px;
+    max-width: 380px;
+    padding: 16px 12px;
   }
 
   .success-actions,
   .modal-actions {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
   }
 
@@ -1668,16 +1685,16 @@ body {
   }
 
   .solved-preview-container {
-    max-height: 220px;
-    padding: 8px;
+    max-height: 200px;
+    padding: 6px;
   }
 
   #solved-canvas-preview {
-    max-height: 190px;
+    max-height: 170px;
   }
 
   .gallery-list {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
 }
