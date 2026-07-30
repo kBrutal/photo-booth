@@ -253,24 +253,9 @@ const AetherBooth = {
   dom: {},
 
   init() {
-    this.detectMobileDevice();
     this.cacheDomElements();
     this.bindEvents();
     this.loadGallery();
-  },
-
-  detectMobileDevice() {
-    const checkMobile = () => {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-      if (isMobile) {
-        document.body.classList.add('is-mobile-device');
-      } else {
-        document.body.classList.remove('is-mobile-device');
-      }
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    window.addEventListener('orientationchange', checkMobile);
   },
 
   cacheDomElements() {
