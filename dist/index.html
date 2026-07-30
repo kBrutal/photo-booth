@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AetherBooth - Retro Photo Booth & Scramble Puzzle</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Styling -->
+  <script type="module" crossorigin src="/assets/index-C5lWhaDf.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-Cqvr_H5P.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <i class="fa-solid fa-camera-retro logo-icon"></i>
+        <h1>Aether<span>Booth</span></h1>
+      </div>
+      <p class="tagline">Smile, Shoot, Solve & Save</p>
+    </header>
+
+    <main class="main-content">
+      <!-- 1. WELCOME SCREEN -->
+      <section id="welcome-screen" class="view-section active">
+        <div class="welcome-card glass-panel">
+          <div class="welcome-decor">
+            <span class="decor-dot"></span>
+            <span class="decor-dot"></span>
+            <span class="decor-dot"></span>
+          </div>
+          <h2 class="section-title">Enter the Creative Booth</h2>
+          <p class="section-desc">
+            Capture a sequence of 3 retro-modern photos, customize them with live filters, and unscramble each photo immediately after taking it to assemble and download your final film strip.
+          </p>
+          
+          <div class="steps-preview">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <h3>Smile & Capture</h3>
+              <p>Pose for a photo with a visual countdown beep</p>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <h3>Unscramble</h3>
+              <p>Solve a 3x3 drag-and-swap puzzle for that photo immediately</p>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <h3>Assemble & Save</h3>
+              <p>Unlock all 3 puzzles to download your compiled film strip</p>
+            </div>
+          </div>
+          
+          <button id="btn-start" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-bolt"></i> Access Camera & Start
+          </button>
+          
+          <div id="camera-error" class="error-banner hidden">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <p>Camera access denied or unavailable. Please enable permissions in your browser and try again.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. PHOTO BOOTH SCREEN -->
+      <section id="booth-screen" class="view-section">
+        <div class="booth-layout">
+          <!-- Left side: Camera Viewport -->
+          <div class="viewport-container glass-panel">
+            <div class="camera-lens">
+              <canvas id="camera-canvas"></canvas>
+              <video id="video-preview" autoplay playsinline muted class="hidden"></video>
+              <!-- Live Frame Overlay Layer -->
+              <div id="frame-overlay" class="frame-overlay frame-none"></div>
+              <div id="countdown-overlay" class="hidden">
+                <span id="countdown-number">3</span>
+              </div>
+              <div id="flash-overlay"></div>
+              <div class="capture-indicator hidden" id="capture-indicator">
+                <span class="dot"></span> LIVE
+              </div>
+            </div>
+            
+            <!-- Live camera frame selector bar -->
+            <div class="frames-container">
+              <h3>Select Camera Frame & Overlay</h3>
+              <div class="frame-options scrollbar-hidden" id="frame-options">
+                <button class="frame-btn active" data-frame="none">
+                  <div class="frame-icon"><i class="fa-solid fa-ban"></i></div>
+                  <span>Clean</span>
+                </button>
+                <button class="frame-btn" data-frame="dslr">
+                  <div class="frame-icon"><i class="fa-solid fa-camera"></i></div>
+                  <span>DSLR Pro</span>
+                </button>
+                <button class="frame-btn" data-frame="film">
+                  <div class="frame-icon"><i class="fa-solid fa-film"></i></div>
+                  <span>35mm Film</span>
+                </button>
+                <button class="frame-btn" data-frame="instax">
+                  <div class="frame-icon"><i class="fa-solid fa-image"></i></div>
+                  <span>Instax Wide</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Live filter bar -->
+            <div class="filters-container">
+              <h3>Select Retro Film Style</h3>
+              <div class="filter-options scrollbar-hidden" id="filter-options">
+                <button class="filter-btn active" data-filter="normal">
+                  <div class="filter-preview filter-normal"></div>
+                  <span>Normal</span>
+                </button>
+                <button class="filter-btn" data-filter="kodachrome">
+                  <div class="filter-preview filter-kodachrome"></div>
+                  <span>Kodachrome '74</span>
+                </button>
+                <button class="filter-btn" data-filter="polaroid">
+                  <div class="filter-preview filter-polaroid"></div>
+                  <span>Polaroid 600</span>
+                </button>
+                <button class="filter-btn" data-filter="sunkissed">
+                  <div class="filter-preview filter-sunkissed"></div>
+                  <span>Sunkissed</span>
+                </button>
+                <button class="filter-btn" data-filter="autumn">
+                  <div class="filter-preview filter-autumn"></div>
+                  <span>Autumn</span>
+                </button>
+                <button class="filter-btn" data-filter="flash">
+                  <div class="filter-preview filter-flash"></div>
+                  <span>Xenon Flash</span>
+                </button>
+                <button class="filter-btn" data-filter="trix">
+                  <div class="filter-preview filter-trix"></div>
+                  <span>Tri-X B&W</span>
+                </button>
+                <button class="filter-btn" data-filter="fuji">
+                  <div class="filter-preview filter-fuji"></div>
+                  <span>Fujifilm 90s</span>
+                </button>
+                <button class="filter-btn" data-filter="vhs">
+                  <div class="filter-preview filter-fuji"></div>
+                  <span>VHS Tape</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right side: Sidebar and control panel -->
+          <div class="controls-sidebar glass-panel">
+            <div class="booth-status">
+              <h2 id="booth-status-title">Ready for Photo 1?</h2>
+              <p id="booth-status-desc">Click below to start the countdown for your first capture.</p>
+            </div>
+            
+            <div class="film-strip-preview">
+              <h3>Photo Strip Snapshots</h3>
+              <div class="strip-slots">
+                <div class="strip-slot" id="slot-0">
+                  <div class="slot-placeholder"><i class="fa-solid fa-image"></i><span>Photo 1</span></div>
+                </div>
+                <div class="strip-slot" id="slot-1">
+                  <div class="slot-placeholder"><i class="fa-solid fa-image"></i><span>Photo 2</span></div>
+                </div>
+                <div class="strip-slot" id="slot-2">
+                  <div class="slot-placeholder"><i class="fa-solid fa-image"></i><span>Photo 3</span></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="booth-actions">
+              <button id="btn-capture" class="btn btn-action">
+                <i class="fa-solid fa-camera"></i> Take Photo 1
+              </button>
+              <button id="btn-back-home" class="btn btn-secondary">
+                <i class="fa-solid fa-chevron-left"></i> Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. PUZZLE SCREEN -->
+      <section id="puzzle-screen" class="view-section">
+        <div class="puzzle-layout">
+          <!-- Left side: The puzzle board -->
+          <div class="puzzle-board-container glass-panel">
+            <div class="puzzle-header">
+              <h2 id="puzzle-title">Unscramble Photo 1</h2>
+              <p>Drag and swap the 9 scrambled pieces into their correct spots.</p>
+            </div>
+            
+            <div class="puzzle-wrapper">
+              <div id="puzzle-board" class="puzzle-grid">
+                <!-- 9 grid cells dynamically populated via JS -->
+              </div>
+              <div id="puzzle-ghost-guide" class="hidden"></div>
+            </div>
+            
+            <div class="puzzle-actions">
+              <button id="btn-hint" class="btn btn-secondary">
+                <i class="fa-solid fa-eye"></i> Show Guide
+              </button>
+              <button id="btn-reset-puzzle" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-rotate-right"></i> Rescramble
+              </button>
+            </div>
+          </div>
+          
+          <!-- Right side: Info & Actions (Simplified - no timings or moves) -->
+          <div class="puzzle-info glass-panel">
+            <div class="puzzle-helper-card">
+              <h3>Puzzle Guide</h3>
+              <ul>
+                <li><i class="fa-solid fa-circle-info"></i> Click and drag a piece over another piece to swap them.</li>
+                <li><i class="fa-solid fa-circle-info"></i> A correct piece will show a subtle golden glow border.</li>
+                <li><i class="fa-solid fa-circle-info"></i> Once solved, you will unlock this photo and proceed to the next step.</li>
+              </ul>
+            </div>
+            
+            <button id="btn-retake" class="btn btn-danger w-100">
+              <i class="fa-solid fa-camera"></i> Abandon & Retake Photo
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. GALLERY SECTION -->
+      <section id="gallery-container" class="gallery-container-section glass-panel">
+        <h2 class="gallery-title"><i class="fa-solid fa-images"></i> My Photo Strip Gallery</h2>
+        <div id="gallery-list" class="gallery-list">
+          <div class="gallery-empty" id="gallery-empty-state">
+            <i class="fa-regular fa-folder-open empty-icon"></i>
+            <p>Your saved photo strips will appear here. Solve a puzzle to start building your gallery!</p>
+          </div>
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- INTERMEDIATE UNLOCK OVERLAY -->
+  <div id="unlock-overlay" class="overlay hidden">
+    <div class="success-card glass-panel text-center">
+      <div class="success-icon-wrap" style="border-color: var(--accent); background: rgba(6, 182, 212, 0.1);">
+        <i class="fa-solid fa-lock-open success-icon" style="color: var(--accent);"></i>
+      </div>
+      <h2 id="unlock-title">Photo 1 Unlocked!</h2>
+      <p class="success-message" id="unlock-message">Awesome posing! Solve the remaining puzzles to assemble your final film strip.</p>
+      <div class="success-actions">
+        <button id="btn-unlock-continue" class="btn btn-primary w-100">
+          Continue to Next Photo <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS CONGRATULATIONS OVERLAY -->
+  <div id="success-overlay" class="overlay hidden">
+    <div class="success-card glass-panel text-center">
+      <div class="success-icon-wrap">
+        <i class="fa-solid fa-trophy success-icon"></i>
+      </div>
+      <h2>Film Strip Unlocked!</h2>
+      <p class="success-message">Excellent work! All puzzles have been solved. Your custom photo strip has been downloaded successfully.</p>
+      
+      <div class="solved-preview-container">
+        <!-- Renders the solved strip canvas -->
+        <canvas id="solved-canvas-preview"></canvas>
+      </div>
+      
+      <div class="success-actions">
+        <button id="btn-download-again" class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> Save Photo Again
+        </button>
+        <button id="btn-success-new" class="btn btn-secondary">
+          <i class="fa-solid fa-camera"></i> Shoot Another
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN VIEW MODAL FOR GALLERY -->
+  <div id="gallery-modal" class="overlay hidden">
+    <div class="modal-card glass-panel">
+      <button class="close-modal" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-body">
+        <img id="modal-img-preview" src="" alt="Fullscreen Strip Preview">
+      </div>
+      <div class="modal-actions">
+        <button id="btn-modal-download" class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> Download Strip
+        </button>
+        <button id="btn-modal-delete" class="btn btn-danger">
+          <i class="fa-solid fa-trash-can"></i> Delete from Gallery
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Offscreen element to compile images -->
+  <canvas id="offscreen-canvas" class="hidden"></canvas>
+
+  <!-- Hidden SVG for advanced filters (drawn offscreen to force evaluation on all browsers) -->
+  <svg style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; overflow: hidden;" width="1" height="1">
+    <defs>
+      <!-- Kodachrome 1970s (Warm, rich reds and vintage color saturation) -->
+      <filter id="advanced-kodachrome" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1.12 0.0 0.0 0.0 0.04 0.0 1.08 0.0 0.0 0.02 0.0 0.0 0.92 0.0 -0.02 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="gamma" exponent="0.85" />
+          <feFuncG type="gamma" exponent="0.95" />
+          <feFuncB type="gamma" exponent="1.15" />
+        </feComponentTransfer>
+      </filter>
+
+      <!-- Polaroid Faded (Low contrast, matte/faded shadows, warm tint) -->
+      <filter id="advanced-polaroid" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="0.85 0.10 0.05 0.0 0.04 0.05 0.80 0.15 0.0 0.04 0.02 0.08 0.70 0.0 0.02 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="0.80" intercept="0.15" />
+          <feFuncG type="linear" slope="0.80" intercept="0.15" />
+          <feFuncB type="linear" slope="0.72" intercept="0.18" />
+        </feComponentTransfer>
+      </filter>
+
+      <!-- Sunkissed (Amber-gold lighting wash, golden hour glow) -->
+      <filter id="advanced-sunkissed" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1.18 0.0 0.0 0.0 0.08 0.0 1.06 0.0 0.0 0.03 0.0 0.0 0.85 0.0 -0.06 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="gamma" exponent="0.80" />
+          <feFuncG type="gamma" exponent="0.90" />
+          <feFuncB type="gamma" exponent="1.10" />
+        </feComponentTransfer>
+      </filter>
+
+      <!-- Autumn (Deep high-contrast orange, bronze and warm-red forest hues) -->
+      <filter id="advanced-autumn" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1.30 0.0 0.0 0.0 0.06 0.0 1.10 0.0 0.0 -0.02 0.0 0.0 0.70 0.0 -0.10 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="1.20" intercept="-0.02" />
+          <feFuncG type="linear" slope="1.00" intercept="-0.02" />
+          <feFuncB type="linear" slope="0.75" intercept="0.05" />
+        </feComponentTransfer>
+      </filter>
+
+      <!-- Xenon Flash (Slightly cooler, high-exposure pop with physical flash pop highlights) -->
+      <filter id="advanced-flash" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1.05 0.0 0.0 0.0 0.16 0.0 1.05 0.0 0.0 0.16 0.0 0.0 1.10 0.0 0.22 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="1.25" intercept="0.02" />
+          <feFuncG type="linear" slope="1.25" intercept="0.02" />
+          <feFuncB type="linear" slope="1.30" intercept="0.05" />
+        </feComponentTransfer>
+      </filter>
+
+      <!-- Grainy Tri-X B&W (Silver-halide high contrast monochrome with coarse organic film grain) -->
+      <filter id="advanced-trix" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="0.299 0.587 0.114 0.0 0.0 0.299 0.587 0.114 0.0 0.0 0.299 0.587 0.114 0.0 0.0 0.0 0.0 0.0 1.0 0.0" result="gray" />
+        <feComponentTransfer in="gray" result="contrast">
+          <feFuncR type="linear" slope="1.40" intercept="-0.18" />
+          <feFuncG type="linear" slope="1.40" intercept="-0.18" />
+          <feFuncB type="linear" slope="1.40" intercept="-0.18" />
+        </feComponentTransfer>
+        <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" result="noise" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.20 0" result="grain" />
+        <feBlend mode="overlay" in="contrast" in2="grain" />
+      </filter>
+
+      <!-- Fujifilm 90s (Cool cyan shadow cast, fine grain, matte finish) -->
+      <filter id="advanced-fuji" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="0.90 0.0 0.0 0.0 -0.01 0.0 0.95 0.0 0.0 0.03 0.0 0.0 1.00 0.0 0.05 0.0 0.0 0.0 1.0 0.0" result="colorMapped" />
+        <feComponentTransfer in="colorMapped" result="faded">
+          <feFuncR type="linear" slope="0.88" intercept="0.04" />
+          <feFuncG type="linear" slope="0.88" intercept="0.08" />
+          <feFuncB type="linear" slope="0.88" intercept="0.10" />
+        </feComponentTransfer>
+        <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="2" result="noise" />
+        <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.10 0" result="grain" />
+        <feBlend mode="overlay" in="faded" in2="grain" />
+      </filter>
+
+      <!-- VHS Tape (Retro magnetic tape color skew and CRT tracking distortion) -->
+      <filter id="advanced-vhs" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1.10 0.10 0.0 0.0 -0.04 0.0 1.00 0.10 0.0 -0.02 0.0 0.0 1.20 0.0 0.06 0.0 0.0 0.0 1.0 0.0" />
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="1.05" intercept="0.0" />
+          <feFuncG type="linear" slope="1.05" intercept="0.0" />
+          <feFuncB type="linear" slope="1.00" intercept="0.06" />
+        </feComponentTransfer>
+      </filter>
+    </defs>
+  </svg>
+
+</body>
+</html>
