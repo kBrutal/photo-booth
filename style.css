@@ -1055,8 +1055,11 @@ body {
 /* 3x3 layout for a 4:3 aspect ratio photo grid */
 .puzzle-grid {
   display: grid;
-  grid-template-columns: repeat(3, 140px);
-  grid-template-rows: repeat(3, 105px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 420px;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
   gap: 6px;
   position: relative;
 }
@@ -1445,58 +1448,211 @@ body {
 }
 
 /* ==========================================
-   6. RESPONSIVE DESIGN ADJUSTMENTS
+   6. RESPONSIVE DESIGN & MOBILE OPTIMIZATIONS
    ========================================== */
+
+/* Touch momentum horizontal scrollbars for toolbar items */
+.frame-options,
+.filter-options {
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+.frame-btn,
+.filter-btn {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
 @media (max-width: 992px) {
+  .app-container {
+    padding: 16px 12px;
+  }
 
   .booth-layout,
   .puzzle-layout {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 20px;
+  }
+
+  .viewport-container,
+  .controls-sidebar,
+  .puzzle-board-container,
+  .puzzle-info {
+    padding: 16px;
   }
 
   .film-strip-preview {
-    margin: 16px 0;
+    margin: 14px 0;
   }
 
   .strip-slots {
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   .strip-slot {
-    width: calc(33.3% - 7px);
-    height: 96px;
+    flex: 1;
+    height: 86px;
   }
 
   .puzzle-helper-card {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 600px) {
+  .app-header {
+    margin-bottom: 16px;
+  }
+
   .app-header h1 {
-    font-size: 2.3rem;
+    font-size: 2.1rem;
+  }
+
+  .app-header .logo-icon {
+    font-size: 1.7rem;
+  }
+
+  .app-header .tagline {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
   }
 
   .welcome-card {
-    padding: 32px 16px;
-    margin: 20px auto;
+    padding: 24px 16px;
+    margin: 12px auto;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .section-desc {
+    font-size: 0.92rem;
+    margin-bottom: 24px;
   }
 
   .steps-preview {
     grid-template-columns: 1fr;
     gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .step-item {
+    padding: 16px 12px;
+  }
+
+  .viewport-container {
+    padding: 12px;
+    gap: 14px;
+  }
+
+  /* Responsive camera frame overlays on mobile */
+  .frame-overlay.frame-dslr {
+    border-width: 14px;
+  }
+
+  .frame-overlay.frame-dslr::after {
+    font-size: 0.58rem;
+    padding: 2px 8px;
+    max-width: 92%;
+    bottom: 2px;
+  }
+
+  .frame-overlay.frame-film {
+    border-width: 16px;
+  }
+
+  .frame-overlay.frame-film::before {
+    font-size: 0.55rem;
+    top: -14px;
+    left: 8px;
+    letter-spacing: 1px;
+  }
+
+  .frame-overlay.frame-film::after {
+    font-size: 0.55rem;
+    bottom: -14px;
+    right: 8px;
+    letter-spacing: 1px;
+  }
+
+  .frame-overlay.frame-instax {
+    border-top-width: 12px;
+    border-left-width: 14px;
+    border-right-width: 14px;
+    border-bottom-width: 34px;
+  }
+
+  .frame-overlay.frame-instax::before {
+    font-size: 0.55rem;
+    top: -10px;
+  }
+
+  .frame-overlay.frame-instax::after {
+    font-size: 0.72rem;
+    bottom: -26px;
+  }
+
+  /* Puzzle responsive mobile scaling */
+  .puzzle-wrapper {
+    padding: 6px;
+    width: 100%;
+    margin-bottom: 16px;
   }
 
   .puzzle-grid {
-    grid-template-columns: repeat(3, 90px);
-    grid-template-rows: repeat(3, 68px);
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    gap: 4px;
+  }
+
+  .puzzle-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .puzzle-actions .btn {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 0.78rem;
+  }
+
+  /* Overlays & Modals on mobile */
+  .success-card,
+  .modal-card {
+    width: 95%;
+    max-width: 400px;
+    padding: 20px 16px;
   }
 
   .success-actions,
   .modal-actions {
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+  }
+
+  .success-actions .btn,
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+  .solved-preview-container {
+    max-height: 220px;
+    padding: 8px;
+  }
+
+  #solved-canvas-preview {
+    max-height: 190px;
+  }
+
+  .gallery-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 }
