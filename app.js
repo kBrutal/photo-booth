@@ -518,11 +518,13 @@ const AetherBooth = {
     let offsetY = 0;
 
     if (videoAspect > targetAspect) {
-      drawH = targetWidth / videoAspect;
-      offsetY = (targetHeight - drawH) / 2;
-    } else {
+      // Scale by height to cover entire canvas edge-to-edge without black side strips
       drawW = targetHeight * videoAspect;
       offsetX = (targetWidth - drawW) / 2;
+    } else {
+      // Scale by width to cover entire canvas edge-to-edge
+      drawH = targetWidth / videoAspect;
+      offsetY = (targetHeight - drawH) / 2;
     }
 
     return { offsetX, offsetY, drawW, drawH };
@@ -533,8 +535,6 @@ const AetherBooth = {
     const ctx = canvas.getContext('2d');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const { offsetX, offsetY, drawW, drawH } = this.getScaledVideoCoords(
       this.dom.videoPreview,
