@@ -792,18 +792,62 @@ body {
   letter-spacing: 1px;
 }
 
-.frame-overlay.frame-instax::after {
-  content: '★ PHOTO BOOTH MEMORIES ★';
+/* Dynamic Instax Live Caption Element */
+.instax-live-caption {
   position: absolute;
   bottom: -38px;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-header);
   font-style: italic;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #2d1f10;
   white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Custom Instax Input Panel */
+.instax-text-input-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  background: var(--bg-dark);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 2px solid var(--border-dark);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.instax-text-input-wrap label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.instax-text-input-wrap input {
+  font-family: var(--font-header);
+  font-style: italic;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  border: 2px solid var(--border-dark);
+  border-radius: 6px;
+  outline: none;
+  background: #fff;
+  color: var(--text-main);
+  box-shadow: 2px 2px 0px var(--border-dark);
+  transition: var(--transition-tactile);
+}
+
+.instax-text-input-wrap input:focus {
+  border-color: var(--primary);
 }
 
 /* Filters UI */

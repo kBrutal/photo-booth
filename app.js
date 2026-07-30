@@ -231,6 +231,7 @@ const AetherBooth = {
   selectedFilter: 'normal',
   selectedFrame: 'none',
   currentFacingMode: 'user', // 'user' (front) or 'environment' (back)
+  instaxCustomText: '★ PHOTO BOOTH MEMORIES ★',
   compiledStripDataUrl: null,
 
   // Live Canvas Preview variables
@@ -280,6 +281,8 @@ const AetherBooth = {
     this.dom.filterOptions = document.getElementById('filter-options');
     this.dom.frameOptions = document.getElementById('frame-options');
     this.dom.frameOverlay = document.getElementById('frame-overlay');
+    this.dom.instaxTextContainer = document.getElementById('instax-text-container');
+    this.dom.instaxCustomText = document.getElementById('instax-custom-text');
 
     this.dom.boothStatusTitle = document.getElementById('booth-status-title');
     this.dom.boothStatusDesc = document.getElementById('booth-status-desc');
@@ -337,6 +340,14 @@ const AetherBooth = {
         btn.classList.add('active');
 
         this.selectedFrame = btn.dataset.frame;
+        this.applyFrameToPreview();
+      });
+    }
+
+    // Instax Custom Text Input
+    if (this.dom.instaxCustomText) {
+      this.dom.instaxCustomText.addEventListener('input', (e) => {
+        this.instaxCustomText = e.target.value;
         this.applyFrameToPreview();
       });
     }
@@ -591,10 +602,26 @@ const AetherBooth = {
   applyFrameToPreview() {
     if (!this.dom.frameOverlay) return;
     this.dom.frameOverlay.className = 'frame-overlay';
+
+    const prevCap = this.dom.frameOverlay.querySelector('.instax-live-caption');
+    if (prevCap) prevCap.remove();
+
     if (this.selectedFrame && this.selectedFrame !== 'none') {
       this.dom.frameOverlay.classList.add(`frame-${this.selectedFrame}`);
+
+      if (this.selectedFrame === 'instax') {
+        if (this.dom.instaxTextContainer) this.dom.instaxTextContainer.classList.remove('hidden');
+
+        const liveCaption = document.createElement('span');
+        liveCaption.classList.add('instax-live-caption');
+        liveCaption.innerText = this.instaxCustomText || '';
+        this.dom.frameOverlay.appendChild(liveCaption);
+      } else {
+        if (this.dom.instaxTextContainer) this.dom.instaxTextContainer.classList.add('hidden');
+      }
     } else {
       this.dom.frameOverlay.classList.add('frame-none');
+      if (this.dom.instaxTextContainer) this.dom.instaxTextContainer.classList.add('hidden');
     }
   },
 
@@ -705,10 +732,11 @@ const AetherBooth = {
       ctx.fillText('INSTAX WIDE • READY 📸', width - 150, 14);
 
       // Bottom handwritten chin text
+      const captionText = this.instaxCustomText || '★ PHOTO BOOTH MEMORIES ★';
       ctx.font = 'italic bold 14px Georgia, serif';
       ctx.fillStyle = '#2d1f10';
       ctx.textAlign = 'center';
-      ctx.fillText('★ PHOTO BOOTH MEMORIES ★', width / 2, height - 16);
+      ctx.fillText(captionText, width / 2, height - 16);
       ctx.textAlign = 'left';
     }
 
