@@ -408,6 +408,7 @@ const AetherBooth = {
       });
       
       this.dom.videoPreview.srcObject = this.mediaStream;
+      await this.dom.videoPreview.play().catch(e => console.warn("Mobile video play exception:", e));
       
       // Setup display canvas size
       this.dom.cameraCanvas.width = this.photoWidth;
@@ -475,7 +476,7 @@ const AetherBooth = {
     }
     
     const render = () => {
-      if (this.mediaStream && this.dom.videoPreview.readyState >= 2) {
+      if (this.mediaStream && (this.dom.videoPreview.readyState >= 1 || this.dom.videoPreview.videoWidth > 0)) {
         this.renderLiveFrame();
       }
       this.previewLoopId = requestAnimationFrame(render);
@@ -499,6 +500,7 @@ const AetherBooth = {
         audio: false
       });
       this.dom.videoPreview.srcObject = this.mediaStream;
+      await this.dom.videoPreview.play().catch(err => console.warn("Camera flip play error:", err));
     } catch (err) {
       console.warn("Could not switch camera mode:", err);
     }
