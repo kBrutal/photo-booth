@@ -627,18 +627,6 @@ const AetherBooth = {
       ctx.moveTo(border, (height / 3) * 2); ctx.lineTo(width - border, (height / 3) * 2);
       ctx.stroke();
 
-      // Center AF Focus Target Box & Crosshairs
-      const cx = width / 2;
-      const cy = height / 2;
-      ctx.strokeStyle = '#00ff66';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(cx - 24, cy - 24, 48, 48);
-
-      ctx.beginPath();
-      ctx.moveTo(cx - 8, cy); ctx.lineTo(cx + 8, cy);
-      ctx.moveTo(cx, cy - 8); ctx.lineTo(cx, cy + 8);
-      ctx.stroke();
-
       // Top REC & Battery Status
       ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
       ctx.fillRect(28, 4, 110, 18);
