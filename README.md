@@ -1,5 +1,7 @@
 # Pixel Puzzle Booth
 
+Vibe coded a cool photo-booth, just for fun :)
+
 A web application built with HTML, CSS, JavaScript, and Vite.
 
 ## Prerequisites
